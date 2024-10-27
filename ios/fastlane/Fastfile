@@ -8,7 +8,9 @@ lane :deploy_appstore_connect do
   sync_code_signing(
     type: "appstore",
     app_identifier: 'com.schoolcontrol.trudev',
-    readonly: true
+    readonly: true,
+    clone_branch_directly: true,  # Ayuda a reducir problemas de acceso
+    git_basic_authorization: ENV['MATCH_GIT_BASIC_AUTHORIZATION'] # Usa el token para autenticación
   )
 
   # Construye la aplicación iOS con firma automática habilitada
