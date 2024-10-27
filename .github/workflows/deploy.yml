@@ -31,7 +31,8 @@ jobs:
             - name: Set up Flutter
               uses: subosito/flutter-action@v2
               with:
-                  flutter-version: "3.0.0" # Ajusta la versión de Flutter según tu proyecto
+                  flutter-version: "3.5.3" # Ajusta la versión de Flutter según tu proyecto
+                  channel: "stable" # Puedes especificar el canal para asegurar estabilidad
 
             - name: Build and deploy to App Store Connect
               working-directory: ios # Cambia al directorio `ios`
