@@ -33,12 +33,6 @@ jobs:
             - name: Confirm Flutter installation and version
               run: flutter --version
 
-            - name: Clone Certificates Repo
-              env:
-                  PAT: ${{ secrets.CERTIFICATES_REPO_PAT }} # Asegúrate de añadir este secreto en tu repo
-              run: |
-                  git clone https://$PAT@github.com/rterrones87/Trudev-iOS-Certificates.git /var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T/d20241027-10209-p16w2w
-
             - name: Build and deploy to App Store Connect
               working-directory: ios # Cambia al directorio `ios`
               env:
