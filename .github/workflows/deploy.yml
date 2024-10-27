@@ -1,9 +1,12 @@
 name: Deploy to App Store Connect
 
 on:
-    pull_request:
+    push:
         branches:
-            - main # Solo se ejecuta en PR dirigidos a `main`
+            - develop # Cambia esta rama a la que prefieras para el despliegue
+    # pull_request:
+    #     branches:
+    #         - main
 
 jobs:
     deploy:
@@ -21,17 +24,17 @@ jobs:
             - name: Install Bundler
               run: gem install bundler
 
-            - name: Set up Flutter
-              uses: subosito/flutter-action@v2
-              with:
-                  flutter-version: "3.5.3" # Especifica la versión correcta de Flutter
-
-            - name: Switch to stable channel
-              run: flutter channel stable && flutter upgrade
-
             - name: Install Fastlane
               run: bundle install
               working-directory: ios
+
+            - name: Set up Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.5.3" # Ajusta la versión de Flutter según tu proyecto
+
+            - name: Switch to stable channel and upgrade
+              run: flutter channel stable && flutter upgrade
 
             - name: Build and deploy to App Store Connect
               working-directory: ios # Cambia al directorio `ios`
