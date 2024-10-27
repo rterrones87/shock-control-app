@@ -31,10 +31,10 @@ jobs:
             - name: Set up Flutter
               uses: subosito/flutter-action@v2
               with:
-                  flutter-version: "3.5.3" # Ajusta la versión de Flutter según tu proyecto
+                  channel: "stable" # Asegura el canal `stable` sin especificar una versión exacta
 
-            - name: Switch to stable channel and upgrade
-              run: flutter channel stable && flutter upgrade
+            - name: Confirm Flutter installation and version
+              run: flutter --version
 
             - name: Build and deploy to App Store Connect
               working-directory: ios # Cambia al directorio `ios`
