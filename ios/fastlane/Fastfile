@@ -1,7 +1,7 @@
 desc "Build and deploy to AppStore Connect. Requires AppStore Connect API key stored in env variable"
 lane :deploy_appstore_connect do
-  # Configura la construcción de Flutter en modo iOS release
-  sh "flutter build ios --release"
+  # Configura la construcción de Flutter en modo iOS release sin firma
+  sh "flutter build ios --release --no-codesign"
 
   # Configura la sincronización de firmas de código
   setup_ci
@@ -11,17 +11,19 @@ lane :deploy_appstore_connect do
     readonly: true
   )
 
-  # Construye la aplicación iOS
+  # Construye la aplicación iOS con firma automática habilitada
   build_app(
     workspace: "Runner.xcworkspace",
-    scheme: "Runner"
+    scheme: "Runner",
+    export_method: "app-store",
+    xcargs: "-allowProvisioningUpdates"
   )
 
   # Establece la clave API de App Store Connect para Fastlane
   app_store_connect_api_key(
     key_id: 'XCG96459Y9',
     issuer_id: '6da23fa1-0a20-4147-9b18-1588abb7d45c',
-    key_filepath: './fastlane/AuthKey_XCG96459Y9.p8',  # Asegúrate de tener este archivo localmente
+    key_filepath: './fastlane/AuthKey_XCG96459Y9.p8',
     in_house: false
   )
 
@@ -29,7 +31,6 @@ lane :deploy_appstore_connect do
   upload_to_testflight(
     distribute_external: false,
     notify_external_testers: false,
-    # groups: "test",
     changelog: "New version",
     localized_app_info: {
       "es-MX": {
