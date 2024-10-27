@@ -1,0 +1,44 @@
+name: Deploy to App Store Connect
+
+on:
+    push:
+        branches:
+            - develop # Cambia esta rama a la que prefieras para el despliegue
+    # pull_request:
+    #     branches:
+    #         - main
+
+jobs:
+    deploy:
+        runs-on: macos-latest
+
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@v2
+
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: 3.0 # Asegúrate de usar la misma versión de Ruby que en tu entorno local
+
+            - name: Install Bundler
+              run: gem install bundler
+
+            - name: Install Fastlane
+              run: bundle install
+              working-directory: ios
+
+            - name: Set up Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.0.0" # Ajusta la versión de Flutter según tu proyecto
+
+            - name: Build and deploy to App Store Connect
+              working-directory: ios # Cambia al directorio `ios`
+              env:
+                  APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+                  APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+                  APP_STORE_KEY_PATH: ${{ secrets.APP_STORE_KEY_PATH }}
+                  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+                  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+              run: fastlane deploy_appstore_connect
