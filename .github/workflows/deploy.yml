@@ -39,6 +39,7 @@ jobs:
             - name: Build and deploy to App Store Connect
               working-directory: ios # Cambia al directorio `ios`
               env:
+                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
                   APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
                   APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
                   APP_STORE_KEY_PATH: ${{ secrets.APP_STORE_KEY_PATH }}
