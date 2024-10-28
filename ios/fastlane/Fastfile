@@ -1,5 +1,6 @@
 desc "Build and deploy to AppStore Connect. Requires AppStore Connect API key stored in env variable"
 lane :deploy_appstore_connect do
+  ENV["MATCH_GIT_BASIC_AUTHORIZATION"] = ENV["GH_PAT"]
   # Selecciona la versión correcta de Xcode
   xcversion(version: "16.0") # Ajusta según tu versión
   # Configura la construcción de Flutter en modo iOS release sin firma
