@@ -42,18 +42,18 @@ jobs:
             - name: Install Fastlane
               run: gem install fastlane
 
-            - name: Configure Environment Variables
-              env:
-                  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
-                  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-                  APP_STORE_CONNECT_KEY_PATH: "./fastlane/AuthKey_XCG96459Y9.p8"
-                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-              run: |
-                  echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > $APP_STORE_CONNECT_KEY_PATH
+            # - name: Configure Environment Variables
+            #   env:
+            #       APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+            #       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+            #       APP_STORE_CONNECT_KEY_PATH: "./fastlane/AuthKey_XCG96459Y9.p8"
+            #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+            #   run: |
+            #       echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > $APP_STORE_CONNECT_KEY_PATH
 
             - name: Build and deploy with Fastlane
               env:
                   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
                   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
               run: |
-                  bundle exec fastlane deploy_appstore_connect
+                  fastlane deploy_appstore_connect
