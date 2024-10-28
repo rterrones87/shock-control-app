@@ -5,7 +5,7 @@ lane :deploy_appstore_connect do
 
   # Configura la sincronización de firmas de código usando el repo localmente
   sync_code_signing(
-    type: "appstore",
+    type: "development",
     app_identifier: 'com.schoolcontrol.trudev',
     readonly: true,
   )
