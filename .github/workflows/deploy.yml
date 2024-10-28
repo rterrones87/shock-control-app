@@ -19,7 +19,7 @@ jobs:
                   channel: "stable"
 
             - name: Setup Fastlane
-              run: ruby/setup-ruby@1
+              uses: ruby/setup-ruby@1
               with:
                   ruby-version: "3.3"
                   bundler-cache: true
