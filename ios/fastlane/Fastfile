@@ -4,9 +4,9 @@ lane :deploy_appstore_connect do
   xcversion(version: "16.0") # Ajusta según tu versión
   # Configura la construcción de Flutter en modo iOS release sin firma
   # sh "flutter build ios --release --no-codesign"
-
+  setup_ci
   # Configura la sincronización de firmas de código usando el repo localmente
-  match(
+  sync_code_signing(
     type: "appstore",
     app_identifier: 'com.schoolcontrol.trudev',
     readonly: true,
