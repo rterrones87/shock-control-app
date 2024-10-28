@@ -6,7 +6,7 @@ lane :deploy_appstore_connect do
   # sh "flutter build ios --release --no-codesign"
 
   # Configura la sincronización de firmas de código usando el repo localmente
-  sync_code_signing(
+  match(
     type: "appstore",
     app_identifier: 'com.schoolcontrol.trudev',
     readonly: true,
