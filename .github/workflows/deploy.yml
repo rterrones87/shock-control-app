@@ -26,8 +26,8 @@ jobs:
               with:
                   flutter-version: "3.3.0" # Ajusta según la versión de Flutter que usas
 
-            - name: Build Flutter for iOS
-              run: flutter build ios --release --no-codesign
+            # - name: Build Flutter for iOS
+            #   run: flutter build ios --release --no-codesign
 
             - name: Setup Fastlane Match
               env:
