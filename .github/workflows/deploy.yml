@@ -49,6 +49,13 @@ jobs:
                   cd ios/fastlane
                   echo '${{ secrets.APP_STORE_CONNECT_JSON_KEY }}' > store.json
 
+            - name: Setup code signing with match
+              working-directory: ios
+              run: |
+                  fastlane match appstore --readonly
+              env:
+                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
             - name: Run Fastlane
               working-directory: ios
               run: |
