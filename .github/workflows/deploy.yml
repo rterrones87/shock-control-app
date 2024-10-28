@@ -27,7 +27,7 @@ jobs:
             - name: Install Fastlane
               run: gem install fastlane
 
-            - name: SEt up App Store Connect file
+            - name: Set up App Store Connect file
               run: |
                   cd ios
                   cd fastlane
@@ -36,7 +36,7 @@ jobs:
             - name: Run Fastlane
               working-directory: ios
               run: |
-                  cd ios
+                  cd ..
                   fastlane beta
               env:
                   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
