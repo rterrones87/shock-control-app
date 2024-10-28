@@ -1,7 +1,7 @@
 desc "Build and deploy to AppStore Connect. Requires AppStore Connect API key stored in env variable"
 lane :deploy_appstore_connect do
   # Configura la construcción de Flutter en modo iOS release sin firma
-  sh "flutter build ios --release --no-codesign"
+  # sh "flutter build ios --release --no-codesign"
 
   # Configura la sincronización de firmas de código usando el repo localmente
   sync_code_signing(
