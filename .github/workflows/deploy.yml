@@ -29,6 +29,12 @@ jobs:
               with:
                   channel: "stable"
 
+            - name: Flutter clean, pub get, and build
+              run: |
+                  flutter clean
+                  flutter pub get
+                  flutter build ios --no-codesign
+
             - name: Setup Ruby
               uses: ruby/setup-ruby@v1
               with:
