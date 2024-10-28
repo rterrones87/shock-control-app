@@ -13,6 +13,16 @@ jobs:
             - name: Check out repository
               uses: actions/checkout@v3
 
+            - name: Set up Match Repo
+              env:
+                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+                  GH_PAT: ${{ secrets.GH_PAT }}
+              run: |
+                  git clone https://${{ secrets.GH_PAT }}github.com/rterrones87/Trudev-iOS-Certificates.git
+                  cd Trudev-iOS-Certificates
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git config user.name "github-actions[bot]"
+
             - name: Set up Flutter
               uses: subosito/flutter-action@v2
               with:
@@ -31,15 +41,6 @@ jobs:
 
             - name: Install Fastlane
               run: gem install fastlane
-
-            - name: Set up Match Repo
-              env:
-                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-              run: |
-                  git clone https://github.com/rterrones87/Trudev-iOS-Certificates.git
-                  cd Trudev-iOS-Certificates
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-                  git config user.name "github-actions[bot]"
 
             - name: Configure Environment Variables
               env:
