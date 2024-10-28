@@ -54,7 +54,7 @@ jobs:
             - name: Build and deploy with Fastlane
               env:
                   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+                  MATCH_PASSWORD: ${{ secrets.MATCH_SECRET_PASSWORD }}
                   GH_PAT: ${{ secrets.GH_PAT }}
               run: |
                   cd ios
