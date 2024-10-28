@@ -13,13 +13,15 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### deploy_appstore_connect
+## iOS
+
+### ios beta
 
 ```sh
-[bundle exec] fastlane deploy_appstore_connect
+[bundle exec] fastlane ios beta
 ```
 
-Build and deploy to AppStore Connect. Requires AppStore Connect API key stored in env variable
+Push a new beta build to Testflight
 
 ----
 

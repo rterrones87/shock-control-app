@@ -1,51 +1,16 @@
-desc "Build and deploy to AppStore Connect. Requires AppStore Connect API key stored in env variable"
-lane :deploy_appstore_connect do
-  ENV["MATCH_GIT_BASIC_AUTHORIZATION"] = ENV["GH_PAT"]
-  # Selecciona la versión correcta de Xcode
-  xcversion(version: "16.0") # Ajusta según tu versión
-  # Configura la construcción de Flutter en modo iOS release sin firma
-  # sh "flutter build ios --release --no-codesign"
-  setup_ci
-  # Configura la sincronización de firmas de código usando el repo localmente
-  sync_code_signing(
-    type: "appstore",
-    app_identifier: 'com.schoolcontrol.trudev',
-    readonly: true,
-  )
+default_platform(:ios)
 
-  # Construye la aplicación iOS con firma automática habilitada
-  build_app(
-    workspace: "Runner.xcworkspace",
-    scheme: "Runner",
-    export_method: "app-store",
-    xcargs: "-allowProvisioningUpdates"
-  )
-
-  # Establece la clave API de App Store Connect para Fastlane
-  app_store_connect_api_key(
-    key_id: 'XCG96459Y9',
-    issuer_id: '6da23fa1-0a20-4147-9b18-1588abb7d45c',
-    key_filepath: './fastlane/AuthKey_XCG96459Y9.p8',
-    in_house: false
-  )
-
-  # Sube el build a TestFlight
-  upload_to_testflight(
-    distribute_external: false,
-    notify_external_testers: false,
-    changelog: "New version",
-    localized_app_info: {
-      "es-MX": {
-        feedback_email: "rterrones87@gmail.com",
-        marketing_url: "https://trudev.online",
-        privacy_policy_url: "https://trudev.online",
-        description: "es-MX description",
-      }
-    },
-    localized_build_info: {
-      "es-MX": {
-        whats_new: "es-MX changelog",
-      }
-    }
-  )
+platform :ios do
+  desc "Push a new beta build to Testflight"
+  lane :beta do 
+    # sync_code_signing(
+    #   type: "appstore", # O el tipo que corresponda (appstore, development, etc.)
+    #   app_identifier: 'com.schoolcontrol.trudev',
+    #   readonly: true
+    # )
+    setup_ci if ENV["CI"]
+    match(app_identifier:"com.schoolcontrol.trudev", type:"appstore")
+    build_app(workspace: "Runner.xcworkspace" , scheme: "Runner")
+    pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
+  end
 end

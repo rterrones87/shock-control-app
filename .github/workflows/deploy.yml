@@ -11,37 +11,29 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
-            - name: Set up Ruby
-              uses: ruby/setup-ruby@v1
-              with:
-                  ruby-version: "3.0" # Especifica la versión de Ruby que necesitas
-
-            - name: Install Fastlane
-              run: gem install fastlane
-
-            - name: Setup Flutter
+            - name: Setup Flutter environment
               uses: subosito/flutter-action@v2
               with:
-                  flutter-version: "3.3.0" # Ajusta según la versión de Flutter que usas
+                  channel: "stable"
 
-            # - name: Build Flutter for iOS
-            #   run: flutter build ios --release --no-codesign
-
-            - name: Setup Fastlane Match
-              env:
-                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Agrega la contraseña de match en GitHub Secrets
+            - name: Setup Fastlane
+              run: ruby/setup-ruby@1
+              with:
+                  ruby-version: "3.3"
+                  bundler-cache: true
+            - name: SEt up App Store Connect file
               run: |
                   cd ios
-                  fastlane match appstore --readonly
-
-            - name: Deploy to TestFlight
-              env:
-                  APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-                  APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-                  APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-                  GH_PAT: ${{ secrets.GH_PAT }} # Contenido del archivo `.p8`
+                  cd fastlane
+                  echo '${{ secrects.APP_STORE_CONNECT_JSON_KEY }}' > store.json
+            - name: Run Fastlane
+              working-directory: ios
               run: |
-                  cd ios
-                  bundle exec fastlane deploy_appstore_connect
+                  bundler exec fastlane ios beta
+              env:
+                  MATCH_PASSWORD: ${{ secrects.MATCH_PASSWORD }}
+                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrects.MATCH_GIT_BASIC_AUTHORIZATION }}
+                  FASTLANE_PASSWORD: ${{ secrects.FASTLANE_PASSWORD }}
+                  CI: true
