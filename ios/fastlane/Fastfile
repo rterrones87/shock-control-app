@@ -4,7 +4,7 @@ platform :ios do
   desc "Push a new beta build to Testflight"
   lane :beta do 
     setup_ci if ENV["CI"]
-    match(app_identifier: "com.schoolcontrol.trudev", type: "appstore", readonly: false,keychain_name: "tmpKeyChain",
+    match(app_identifier: "com.schoolcontrol.trudev", type: "appstore", readonly: true, keychain_name: "tmpKeyChain",
     keychain_password: "tmpKeyChainPass")
     build_app(workspace: "Runner.xcworkspace", scheme: "Runner" )
     pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
