@@ -8,7 +8,7 @@ platform :ios do
     #   app_identifier: 'com.schoolcontrol.trudev',
     #   readonly: true
     # )
-    xcversion(version: "16.0") # Cambia a la versión que necesitas
+    xcversion(version: "15.0") # Cambia a la versión que necesitas
     setup_ci if ENV["CI"]
     match(app_identifier:"com.schoolcontrol.trudev", type:"appstore")
     build_app(workspace: "Runner.xcworkspace" , scheme: "Runner")
