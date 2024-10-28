@@ -3,59 +3,46 @@ name: Deploy to TestFlight
 on:
     push:
         branches:
-            - develop
+            - develop # Configura el branch que desencadenará el despliegue
 
 jobs:
-    build:
+    deploy:
         runs-on: macos-latest
 
         steps:
-            - name: Check out repository
-              uses: actions/checkout@v3
-
-            # - name: Set up Match Repo
-            #   env:
-            #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-            #       GH_PAT: ${{ secrets.GH_PAT }}
-            #   run: |
-            #       git clone https://${{ secrets.GH_PAT }}@github.com/rterrones87/Trudev-iOS-Certificates.git
-            #       cd Trudev-iOS-Certificates
-            #       git config user.email "github-actions[bot]@users.noreply.github.com"
-            #       git config user.name "github-actions[bot]"
-
-            - name: Set up Flutter
-              uses: subosito/flutter-action@v2
-              with:
-                  channel: "stable" # Asegura el canal `stable` sin especificar una versión exacta
-            - name: Confirm Flutter installation and version
-              run: flutter --version
-
-            - name: Install dependencies
-              run: flutter pub get
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
             - name: Set up Ruby
               uses: ruby/setup-ruby@v1
               with:
-                  ruby-version: "3.0" # Asegúrate de usar una versión compatible con Fastlane
-                  bundler-cache: true
+                  ruby-version: "3.0" # Especifica la versión de Ruby que necesitas
 
-            - name: Install Fastlane
-              run: gem install fastlane
+            - name: Install dependencies
+              run: |
+                  gem install bundler
+                  bundle install
 
-            # - name: Configure Environment Variables
-            #   env:
-            #       APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
-            #       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-            #       APP_STORE_CONNECT_KEY_PATH: "./fastlane/AuthKey_XCG96459Y9.p8"
-            #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-            #   run: |
-            #       echo "${{ secrets.APP_STORE_CONNECT_KEY }}" > $APP_STORE_CONNECT_KEY_PATH
+            - name: Setup Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.3.0" # Ajusta según la versión de Flutter que usas
 
-            - name: Build and deploy with Fastlane
+            - name: Build Flutter for iOS
+              run: flutter build ios --release --no-codesign
+
+            - name: Setup Fastlane Match
               env:
-                  FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-                  MATCH_PASSWORD: ${{ secrets.MATCH_SECRET_PASSWORD }}
-                  GH_PAT: ${{ secrets.GH_PAT }}
+                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Agrega la contraseña de match en GitHub Secrets
+              run: |
+                  bundle exec fastlane match appstore --readonly
+
+            - name: Deploy to TestFlight
+              env:
+                  APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+                  APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+                  APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+                  GH_PAT: ${{ secrets.GH_PAT }} # Contenido del archivo `.p8`
               run: |
                   cd ios
-                  fastlane deploy_appstore_connect
+                  bundle exec fastlane deploy_appstore_connect
