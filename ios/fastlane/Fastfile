@@ -17,7 +17,7 @@ lane :deploy_appstore_connect do
     workspace: "Runner.xcworkspace",
     scheme: "Runner",
     export_method: "app-store",
-    # xcargs: "-allowProvisioningUpdates"
+    xcargs: "-allowProvisioningUpdates"
   )
 
   # Establece la clave API de App Store Connect para Fastlane
