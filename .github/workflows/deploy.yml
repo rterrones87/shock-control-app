@@ -65,4 +65,8 @@ jobs:
                   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
                   MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
                   FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+                  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+                  APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+                  APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+                  APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
                   CI: true
