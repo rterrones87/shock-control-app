@@ -1,4 +1,4 @@
-git_url(ENV["GIT_CERTS_URL"])
+git_url('https://github.com/rterrones87/ios-certificates')
 
 storage_mode("git")
 
