@@ -18,10 +18,8 @@ jobs:
               with:
                   ruby-version: "3.0" # Especifica la versión de Ruby que necesitas
 
-            - name: Install dependencies
-              run: |
-                  gem install bundler
-                  bundle install
+            - name: Install Fastlane
+              run: gem install fastlane
 
             - name: Setup Flutter
               uses: subosito/flutter-action@v2
@@ -35,7 +33,8 @@ jobs:
               env:
                   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Agrega la contraseña de match en GitHub Secrets
               run: |
-                  bundle exec fastlane match appstore --readonly
+                  cd ios
+                  fastlane match appstore --readonly
 
             - name: Deploy to TestFlight
               env:
