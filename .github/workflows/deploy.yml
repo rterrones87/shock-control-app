@@ -13,6 +13,14 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
 
+            - name: Install xcodes
+              run: brew install robotsandpencils/made/xcodes
+
+            - name: Select Xcode version
+              run: |
+                  xcodes select 15.0 # Cambia a la versión de Xcode que necesitas
+                  sudo xcode-select -s /Applications/Xcode-15.0.app
+
             - name: Setup Flutter environment
               uses: subosito/flutter-action@v2
               with:
