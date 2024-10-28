@@ -33,6 +33,13 @@ jobs:
             - name: Confirm Flutter installation and version
               run: flutter --version
 
+            # Paso adicional para clonar el repositorio de certificados con autenticación
+            - name: Clone Certificates Repo with Token
+              env:
+                  PAT: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+              run: |
+                  git clone https://$PAT@github.com/rterrones87/Trudev-iOS-Certificates.git ios/certificates-repo -c http.extraheader="Authorization: Basic $PAT"
+
             - name: Build and deploy to App Store Connect
               working-directory: ios # Cambia al directorio `ios`
               env:
