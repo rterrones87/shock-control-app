@@ -3,32 +3,9 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to Testflight"
   lane :beta do 
-    # sync_code_signing(
-    #   type: "appstore", # O el tipo que corresponda (appstore, development, etc.)
-    #   app_identifier: 'com.schoolcontrol.trudev',
-    #   readonly: true
-    # )
     setup_ci if ENV["CI"]
-   
-    match(
-      type: "appstore", 
-      app_identifier: "com.schoolcontrol.trudev", 
-      username: ENV["FASTLANE_USER"]
-    )
-  
-    # Clave de autenticación de App Store Connect
-    app_store_connect_api_key(
-      key_id: ENV["APPLE_KEY_ID"],
-      issuer_id: ENV["APPLE_ISSUER_ID"],
-      key_content: ENV["APPLE_KEY_CONTENT"]
-    )
-
-    build_app(
-      workspace: "Runner.xcworkspace",
-      scheme: "Runner",
-      export_method: "app-store",
-      xcargs: "-allowProvisioningUpdates"
-    )
+    match(app_identifier: "com.schoolcontrol.trudev", type: "appstore")
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
     pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
   end
 end
