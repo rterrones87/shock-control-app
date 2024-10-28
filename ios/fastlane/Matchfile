@@ -1,4 +1,4 @@
-git_url("https://#{ENV['MATCH_GIT_BASIC_AUTHORIZATION']}@github.com/rterrones87/Trudev-iOS-Certificates.git")
+git_url("https://github.com/rterrones87/Trudev-iOS-Certificates.git")
 
 storage_mode("git")
 

@@ -3,16 +3,11 @@ lane :deploy_appstore_connect do
   # Configura la construcción de Flutter en modo iOS release sin firma
   sh "flutter build ios --release --no-codesign"
 
-  # Clona el repositorio de certificados manualmente
-  sh "git clone https://#{ENV['MATCH_GIT_BASIC_AUTHORIZATION']}@github.com/rterrones87/Trudev-iOS-Certificates.git ios/certificates-repo"
-
   # Configura la sincronización de firmas de código usando el repo localmente
   sync_code_signing(
     type: "appstore",
     app_identifier: 'com.schoolcontrol.trudev',
     readonly: true,
-    clone_branch_directly: true
-    git_branch: "main" # O la rama correspondiente que uses
   )
 
   # Construye la aplicación iOS con firma automática habilitada
