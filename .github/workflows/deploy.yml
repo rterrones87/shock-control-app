@@ -33,7 +33,7 @@ jobs:
               run: |
                   flutter clean
                   flutter pub get
-                  flutter build ios --no-codesign
+                  # flutter build ios --no-codesign
 
             - name: Setup Ruby
               uses: ruby/setup-ruby@v1
