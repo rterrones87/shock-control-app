@@ -55,6 +55,7 @@ jobs:
               env:
                   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
                   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+                  GH_PAT: ${{ secrets.GH_PAT }}
               run: |
                   cd ios
                   fastlane deploy_appstore_connect
