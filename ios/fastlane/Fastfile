@@ -12,7 +12,8 @@ platform :ios do
     }
   
     build_app(scheme: "Runner")  # Reemplaza "YourAppScheme" con el esquema de tu app
-    upload_to_testflight(api_key: api_key)
+    # upload_to_testflight(api_key: "fastlane/store.json")
+    pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
   end
 #   lane :beta do 
 #     setup_ci if ENV["CI"]
