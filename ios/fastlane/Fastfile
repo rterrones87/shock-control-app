@@ -3,7 +3,11 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to Testflight"
   lane :deploy_appstore_connect do
-    match(type: "appstore")  # Sincroniza los certificados y perfiles
+    match(
+          app_identifier: "com.schoolcontrol.trudev", 
+          type: "appstore", 
+          readonly: true, 
+        )
     build_app(scheme: "Runner",
       xcargs: "-allowProvisioningUpdates"  # Permite actualizaciones de aprovisionamiento
     )  # Reemplaza "YourAppScheme" con el esquema de tu app
