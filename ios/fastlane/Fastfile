@@ -2,23 +2,37 @@ default_platform(:ios)
 
 platform :ios do
   desc "Push a new beta build to Testflight"
-  lane :beta do 
-    setup_ci if ENV["CI"]
-
-    # Crear el llavero en el sistema
-    sh("security create-keychain -p tmpKeyChainPass /Users/runner/Library/Keychains/tmpKeyChain.keychain-db")
-    sh("security unlock-keychain -p tmpKeyChainPass /Users/runner/Library/Keychains/tmpKeyChain.keychain-db")
-    sh("security list-keychains -d user -s /Users/runner/Library/Keychains/tmpKeyChain.keychain-db $(security list-keychains -d user | tr -d '\"')")
-
-
-    match
-      app_identifier: "com.schoolcontrol.trudev", 
-      type: "appstore", 
-      readonly: true, 
-      keychain_name: "/Users/runner/Library/Keychains/tmpKeyChain.keychain-db",
-      keychain_password: "tmpKeyChainPass"
+  lane :deploy_appstore_connect do
+    match(type: "appstore")  # Sincroniza los certificados y perfiles
+  
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY"]
     )
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner" )
-    pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
+  
+    build_app(scheme: "Runner")
+    upload_to_testflight(api_key: api_key)
   end
+#   lane :beta do 
+#     setup_ci if ENV["CI"]
+
+#     # Crear el llavero en el sistema
+#     sh("security create-keychain -p tmpKeyChainPass /Users/runner/Library/Keychains/tmpKeyChain.keychain-db")
+#     sh("security unlock-keychain -p tmpKeyChainPass /Users/runner/Library/Keychains/tmpKeyChain.keychain-db")
+#     sh("security list-keychains -d user -s /Users/runner/Library/Keychains/tmpKeyChain.keychain-db $(security list-keychains -d user | tr -d '\"')")
+
+
+#     match
+#       app_identifier: "com.schoolcontrol.trudev", 
+#       type: "appstore", 
+#       readonly: true, 
+#       keychain_name: "/Users/runner/Library/Keychains/tmpKeyChain.keychain-db",
+#       keychain_password: "tmpKeyChainPass"
+#     )
+#     build_app(workspace: "Runner.xcworkspace", scheme: "Runner" )
+#     pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
+#   end
 end
+
+

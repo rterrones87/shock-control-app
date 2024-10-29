@@ -3,70 +3,105 @@ name: Deploy to TestFlight
 on:
     push:
         branches:
-            - develop # Configura el branch que desencadenará el despliegue
+            - develop # O el branch que prefieras
 
 jobs:
-    deploy:
+    build:
         runs-on: macos-latest
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v2
 
-            # - name: Unlink existing xcodes version
-            #   run: brew unlink xcodes
-
-            # - name: Install xcodes
-            #   run: brew install robotsandpencils/made/xcodes
-
-            # - name: Select Xcode version
-            #   run: |
-            #       xcodes select 16.0 # Cambia a la versión de Xcode que necesitas
-            #       # xcode-select -s /Applications/Xcode-16.0.app
-
-            - name: Setup Flutter environment
-              uses: subosito/flutter-action@v2
-              with:
-                  channel: "stable"
-
-            - name: Flutter clean, pub get, and build
-              run: |
-                  flutter clean
-                  flutter pub get
-                  # flutter build ios --no-codesign
-
-            - name: Setup Ruby
+            - name: Set up Ruby
               uses: ruby/setup-ruby@v1
               with:
-                  ruby-version: "3.3"
-                  bundler-cache: true
+                  ruby-version: 2.7
 
-            - name: Install Fastlane
-              run: gem install fastlane
-
-            - name: Set up App Store Connect file
+            - name: Install dependencies
               run: |
-                  cd ios/fastlane
-                  echo '${{ secrets.APP_STORE_CONNECT_JSON_KEY }}' > store.json
-
-            # - name: Setup code signing with match
-            #   working-directory: ios
-            #   run: |
-            #       fastlane match appstore --readonly
-            #   env:
-            #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-            #       MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+                  gem install bundler
+                  bundle install
 
             - name: Run Fastlane
-              working-directory: ios
-              run: |
-                  fastlane ios beta
               env:
-                  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-                  MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-                  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-                  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-                  APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
-                  APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
-                  APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
-                  CI: true
+                  APP_STORE_CONNECT_API_KEY: ${{ secrets.APPLE_KEY_CONTENT }}
+                  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+                  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+                  FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+              run: |
+                  cd ios
+                  bundle exec fastlane deploy_appstore_connect
+
+# name: Deploy to TestFlight
+
+# on:
+#     push:
+#         branches:
+#             - develop # Configura el branch que desencadenará el despliegue
+
+# jobs:
+#     deploy:
+#         runs-on: macos-latest
+
+#         steps:
+#             - name: Checkout repository
+#               uses: actions/checkout@v3
+
+#             # - name: Unlink existing xcodes version
+#             #   run: brew unlink xcodes
+
+#             # - name: Install xcodes
+#             #   run: brew install robotsandpencils/made/xcodes
+
+#             # - name: Select Xcode version
+#             #   run: |
+#             #       xcodes select 16.0 # Cambia a la versión de Xcode que necesitas
+#             #       # xcode-select -s /Applications/Xcode-16.0.app
+
+#             - name: Setup Flutter environment
+#               uses: subosito/flutter-action@v2
+#               with:
+#                   channel: "stable"
+
+#             - name: Flutter clean, pub get, and build
+#               run: |
+#                   flutter clean
+#                   flutter pub get
+#                   # flutter build ios --no-codesign
+
+#             - name: Setup Ruby
+#               uses: ruby/setup-ruby@v1
+#               with:
+#                   ruby-version: "3.3"
+#                   bundler-cache: true
+
+#             - name: Install Fastlane
+#               run: gem install fastlane
+
+#             - name: Set up App Store Connect file
+#               run: |
+#                   cd ios/fastlane
+#                   echo '${{ secrets.APP_STORE_CONNECT_JSON_KEY }}' > store.json
+
+#             # - name: Setup code signing with match
+#             #   working-directory: ios
+#             #   run: |
+#             #       fastlane match appstore --readonly
+#             #   env:
+#             #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#             #       MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+
+#             - name: Run Fastlane
+#               working-directory: ios
+#               run: |
+#                   fastlane ios beta
+#               env:
+#                   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#                   MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+#                   FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#                   FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#                   APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+#                   APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+#                   APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
+#                   CI: true
