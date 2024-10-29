@@ -8,7 +8,7 @@ platform :ios do
       export_options: {
         provisioningProfiles: { "com.schoolcontrol.trudev" => "match AppStore com.schoolcontrol.trudev" }
       },
-      xcodebuild_options: "-allowProvisioningUpdates"  # Permite actualizaciones de aprovisionamiento
+      xcargs: "-allowProvisioningUpdates"  # Permite actualizaciones de aprovisionamiento
     )  # Reemplaza "YourAppScheme" con el esquema de tu app
     # Sube la app a TestFlight
     upload_to_testflight(
