@@ -20,7 +20,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  gem install bundler
+                  cd ios  # Cambia al directorio donde está el Gemfile
                   bundle install
 
             - name: Run Fastlane
