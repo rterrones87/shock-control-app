@@ -4,8 +4,20 @@ platform :ios do
   desc "Push a new beta build to Testflight"
   lane :beta do 
     setup_ci if ENV["CI"]
-    match(app_identifier: "com.schoolcontrol.trudev", type: "appstore", readonly: true, keychain_name: "tmpKeyChain",
-    keychain_password: "tmpKeyChainPass")
+
+    # Crear el llavero en el sistema
+    sh("security create-keychain -p tmpKeyChainPass /Users/runner/Library/Keychains/tmpKeyChain.keychain-db")
+    sh("security unlock-keychain -p tmpKeyChainPass /Users/runner/Library/Keychains/tmpKeyChain.keychain-db")
+    sh("security list-keychains -d user -s /Users/runner/Library/Keychains/tmpKeyChain.keychain-db $(security list-keychains -d user | tr -d '\"')")
+
+
+    match
+      app_identifier: "com.schoolcontrol.trudev", 
+      type: "appstore", 
+      readonly: true, 
+      keychain_name: "/Users/runner/Library/Keychains/tmpKeyChain.keychain-db",
+      keychain_password: "tmpKeyChainPass"
+    )
     build_app(workspace: "Runner.xcworkspace", scheme: "Runner" )
     pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
   end
