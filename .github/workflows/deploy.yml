@@ -18,14 +18,22 @@ jobs:
               with:
                   ruby-version: 3.0
 
-            - name: Install Fastlane
+            - name: Install dependencies
               run: |
-                  gem install fastlane  # Instala fastlane directamente sin un Gemfile
+                  gem install fastlane
+                  brew install cocoapods
+                  pod repo update
 
-            - name: Set up App Store Connect file
+            - name: Install Flutter dependencies
+              run: flutter pub get
+
+            - name: Build iOS project
+              run: flutter build ios --no-codesign
+
+            - name: Install CocoaPods
               run: |
-                  cd ios/fastlane
-                  echo '${{ secrets.APP_STORE_CONNECT_JSON_KEY }}' > store.json
+                  cd ios
+                  pod install
 
             - name: Run Fastlane
               env:
@@ -35,7 +43,7 @@ jobs:
                   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
               run: |
                   cd ios
-                  fastlane deploy_appstore_connect  # Ejecuta fastlane directamente
+                  fastlane deploy_appstore_connect --allowProvisioningUpdates
 
 # name: Deploy to TestFlight
 
