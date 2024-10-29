@@ -18,10 +18,9 @@ jobs:
               with:
                   ruby-version: 3.0
 
-            - name: Install dependencies
+            - name: Install Fastlane
               run: |
-                  cd ios  # Cambia al directorio donde está el Gemfile
-                  bundle install
+                  gem install fastlane  # Instala fastlane directamente sin un Gemfile
 
             - name: Run Fastlane
               env:
@@ -31,7 +30,7 @@ jobs:
                   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
               run: |
                   cd ios
-                  bundle exec fastlane deploy_appstore_connect
+                  fastlane deploy_appstore_connect  # Ejecuta fastlane directamente
 
 # name: Deploy to TestFlight
 
