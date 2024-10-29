@@ -8,7 +8,7 @@ platform :ios do
     api_key = {
       key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY"]
+      key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY"])
     }
   
     build_app(scheme: "Runner")  # Reemplaza "YourAppScheme" con el esquema de tu app
