@@ -4,14 +4,14 @@ platform :ios do
   desc "Push a new beta build to Testflight"
   lane :deploy_appstore_connect do
     match(type: "appstore")  # Sincroniza los certificados y perfiles
-  
+
     api_key = {
       key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
       key_content: ENV["APP_STORE_CONNECT_API_KEY"]
     }
   
-    build_app(scheme: "Runner")
+    build_app(scheme: "Runner")  # Reemplaza "YourAppScheme" con el esquema de tu app
     upload_to_testflight(api_key: api_key)
   end
 #   lane :beta do 
