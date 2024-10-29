@@ -4,7 +4,12 @@ platform :ios do
   desc "Push a new beta build to Testflight"
   lane :deploy_appstore_connect do
     # match(type: "appstore")  # Sincroniza los certificados y perfiles
-    build_app(scheme: "Runner")  # Reemplaza "YourAppScheme" con el esquema de tu app
+    build_app(scheme: "Runner",
+      export_options: {
+        provisioningProfiles: { "com.schoolcontrol.trudev" => "match AppStore com.schoolcontrol.trudev" }
+      },
+      xcodebuild_options: "-allowProvisioningUpdates"  # Permite actualizaciones de aprovisionamiento
+    )  # Reemplaza "YourAppScheme" con el esquema de tu app
     # Sube la app a TestFlight
     upload_to_testflight(
       api_key: app_store_connect_api_key(
