@@ -16,10 +16,10 @@ platform :ios do
 #     sh("security list-keychains -d user -s /Users/runner/Library/Keychains/tmpKeyChain.keychain-db $(security list-keychains -d user | tr -d '\"')")
 
 
-    match
+    match(
       app_identifier: "com.schoolcontrol.trudev", 
       type: "appstore", 
-      readonly: true, 
+      readonly: true
     )
     build_app(scheme: "Runner" )
     pilot(api_key_path: "fastlane/store.json" , skip_waiting_for_build_processing: true)
