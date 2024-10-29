@@ -17,6 +17,10 @@ jobs:
               uses: ruby/setup-ruby@v1
               with:
                   ruby-version: 3.0
+            - name: Install Flutter
+              run: |
+                  git clone https://github.com/flutter/flutter.git -b stable --depth 1
+                  echo "::add-path::$(pwd)/flutter/bin"
 
             - name: Install dependencies
               run: |
