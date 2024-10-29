@@ -5,9 +5,6 @@ platform :ios do
   lane :deploy_appstore_connect do
     # match(type: "appstore")  # Sincroniza los certificados y perfiles
     build_app(scheme: "Runner",
-      export_options: {
-        provisioningProfiles: { "com.schoolcontrol.trudev" => "match AppStore com.schoolcontrol.trudev" }
-      },
       xcargs: "-allowProvisioningUpdates"  # Permite actualizaciones de aprovisionamiento
     )  # Reemplaza "YourAppScheme" con el esquema de tu app
     # Sube la app a TestFlight
